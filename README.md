@@ -16,7 +16,7 @@ Setting | Type | Usage
 **data** | Array | The data which will be manipulated for pagination (Default: An array of HTMLElements).
 **pagingElement** | HTMLElement | The element where the relevant items per page will appear.
 **paginationBarElement** | HTMLElement | The element where the pagination bar will appear.
-paginationFunction *optional*| Function | Takes 2 parameters: *page data* and *paging element*. The default pagination function outputs HTMLElements to the paging element. If you would like to achieve different functionality, by all means.
+paginationFunction *optional*| Function | Takes 2 parameters: *page data* and *paging element*. This function will be executed on page change. The default pagination function outputs HTMLElements to the paging element. If you would like to achieve different functionality, by all means.
 firstPageIsOne *optional* | Boolean | Makes it so that the visual representation of page numbers would start from 1 rather than 0.
 
 
