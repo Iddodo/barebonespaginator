@@ -10,13 +10,13 @@ A Bare-Bones, very primitive JavaScript paginator.
 ## Settings Parameters
 Setting | Usage
 ------------ | -------------
-&#x1F53A; prevText | Text of the "previous" button.
-&#x1F53A; nextText | Text of the "next" button.
-&#x1F53A; numberOfItemsPerPage | Represents the limit for the number of items in a page.
-&#x1F53A; data | The data which will be manipulated for pagination (Default: An array of HTMLElements).
-&#x1F53A; pagingElement | The element where the relevant items per page will appear.
-&#x1F53A; paginationBarElement | The element where the pagination bar will appear.
-paginationFunction(pageData, pagingElement) *optional*| The default pagination function outputs HTMLElements to the paging element. If you would like to achieve different functionality, by all means.
+**prevText** | Text of the "previous" button.
+**nextText** | Text of the "next" button.
+**numberOfItemsPerPage** | Represents the limit for the number of items in a page.
+**data** | The data which will be manipulated for pagination (Default: An array of HTMLElements).
+**pagingElement** | The element where the relevant items per page will appear.
+**paginationBarElement** | The element where the pagination bar will appear.
+paginationFunction() *optional*| Takes 2 parameters: *page data* and *paging element*. The default pagination function outputs HTMLElements to the paging element. If you would like to achieve different functionality, by all means.
 
 ```javascript
 BareBonesPaginator({
@@ -24,6 +24,7 @@ BareBonesPaginator({
   nextText: "Next",
   data: [...HTMLElements],
   pagingElement: HTMLElement,
-  paginationBarElement: HTMLElement
+  paginationBarElement: HTMLElement,
+  paginationFunction: Function
 });
 ```
