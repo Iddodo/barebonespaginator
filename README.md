@@ -1,5 +1,5 @@
 # barebones paginator
-A Bare-Bones, very primitive JavaScript paginator.
+A Bare-Bones, very primitive JavaScript pagination tool.
 
 
 ## Default Functionality
