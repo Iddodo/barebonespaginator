@@ -54,20 +54,7 @@ function BareBonesPaginator(inputSettings) {
 
     changePage(0); // Initialize paging
 
-    
-    const paginationBarHTML = [ // Prepare pagination bar
-        makePaginationButton(settings.prevText, "p"),
-        ...Array.from({
-            length: numberOfPages
-        }, (x, i) => makePaginationButton((settings.firstPageIsOne ? (i + 1) : i).toString(), i.toString())),
-        makePaginationButton(settings.nextText, "n")
-    ].join('\n');
-
-    if (settings.paginationBarElement) {
-        settings.paginationBarElement.innerHTML = paginationBarHTML; // Output to pagination bar element if it exists
-    }
-
-    
+        
     const bbPaginationButtonClick = (event) => { // Event on pagination button click
         const x = event.target.value;
         if (parseInt(x) == pageIndex) {
@@ -85,7 +72,22 @@ function BareBonesPaginator(inputSettings) {
             changePage(x);
         }
     }
-    getAllPaginationButtonElements().forEach(button => button.addEventListener("click", bbPaginationButtonClick)); 
+    const activatePaginationButtonsEventListener = () => {
+    	getAllPaginationButtonElements().forEach(button => button.addEventListener("click", bbPaginationButtonClick)); 
+    }
+    
+    const paginationBarHTML = [ // Prepare pagination bar
+        makePaginationButton(settings.prevText, "p"),
+        ...Array.from({
+            length: numberOfPages
+        }, (x, i) => makePaginationButton((settings.firstPageIsOne ? (i + 1) : i).toString(), i.toString())),
+        makePaginationButton(settings.nextText, "n")
+    ].join('\n');
+
+    if (settings.paginationBarElement) {
+        settings.paginationBarElement.innerHTML = paginationBarHTML; // Output to pagination bar element if it exists
+        activatePaginationButtonsEventListener();
+    }
     return {
         currentPage: pageIndex,
         page: changePage,
@@ -104,5 +106,6 @@ function BareBonesPaginator(inputSettings) {
         itemNumber: numberOfItems,
         itemsPerPage: itemsPerPage,
         pagesNumber:numberOfPages,
+        activatePaginationButtons: activatePaginationButtonsEventListener
     };
 }
