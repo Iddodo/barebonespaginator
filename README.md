@@ -3,7 +3,7 @@ A Bare-Bones, very primitive JavaScript paginator.
 
 
 ## Default Functionality
-* Takes an array of HTMLElements and the number of items per designated page.
+* Takes an array (default: of HTMLElements) and the number of items per designated page.
 * Outputs unstyled pagination bar to element.
 * Changes page when you click pagination bar buttons, outputs paginated data to element.
 
