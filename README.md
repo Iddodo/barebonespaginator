@@ -39,6 +39,7 @@ page(Integer n) | -- | Change the page.
 gotoPrevPage() | -- | Go to the previous page.
 gotoNextPage() | -- | Go to the next page.
 setPaginationFunction(Function f) | -- | Set the pagination function.
+activatePaginationButtons() | -- | You can use this to easily activate all pagination buttons (those with the class "bb-pagination-button"). Useful if you, i.e., made custom ones.
 
 
 
