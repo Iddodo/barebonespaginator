@@ -14,7 +14,7 @@ prevText *(optional)* | String | Text of the "previous" button. (Default: "*Prev
 nextText *(optional)* | String | Text of the "next" button. (Default: "*Next*")
 itemsPerPage *(optional)* | Integer | Represents the limit for the number of items in a page. (Default: "*1*")
 data **(required**) | Array | The data which will be manipulated for pagination (Default: An array of HTMLElements).
-pagingElement *(optional)* | HTMLElement | The element where the relevant items per page will appear. (**No paging element means you'd need a paging function**)
+pagingElement *(optional)* | HTMLElement | The element where the relevant items of a page will appear. (**No paging element means you'd need a paging function**)
 paginationBarElement *(optional)* | HTMLElement | The element where the pagination bar will appear.
 paginationFunction(pageData, pagingElement) *(optional)*| Function |This function will be executed on page change. The default pagination function outputs HTMLElements to the paging element.
 firstPageIsOne *(optional)* | Boolean | Makes it so that the visual representation of page numbers would start from 1 rather than 0. (Default: *turned off*)
