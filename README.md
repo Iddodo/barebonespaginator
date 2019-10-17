@@ -32,6 +32,7 @@ paginationBarHTML | String | Get the pagination bar HTML.
 
 ## Available functions
 Function | Return Type | Usage
+------------ | ------------- | -------------
 getCurrentPageData() | Array | Fetch items of active page.
 getPageData(Integer n) | Array | Fetch items of a certain page.
 page(Integer n) | -- | Change the page.
