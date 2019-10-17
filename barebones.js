@@ -14,7 +14,6 @@ function BareBonesPaginator(inputSettings) {
     if (!settings.nextText) settings.nextText = "Next";
 
     const makePaginationButton = (txt, val) => `<button class="bb-pagination-button" value="` + (val ? val : txt) + `">` + txt + `</button>`;
-    const getAllPaginationButtonElements = () => [...settings.paginationBarElement.getElementsByClassName('bb-pagination-button')];
     const onPageChange = (d) => { // Recieves array of current page item
         if (!settings.paginationFunction && settings.pagingElement) {
             settings.pagingElement.innerHTML = d.map(elm => elm.outerHTML).join('');
@@ -72,6 +71,8 @@ function BareBonesPaginator(inputSettings) {
             changePage(x);
         }
     }
+    
+    const getAllPaginationButtonElements = () => [...settings.paginationBarElement.getElementsByClassName('bb-pagination-button')];
     const activatePaginationButtonsEventListener = () => {
     	getAllPaginationButtonElements().forEach(button => button.addEventListener("click", bbPaginationButtonClick)); 
     }
