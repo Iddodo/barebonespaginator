@@ -1,4 +1,4 @@
-# barebonespaginator
+# barebones paginator
 A Bare-Bones, very primitive JavaScript paginator.
 
 
@@ -10,14 +10,14 @@ A Bare-Bones, very primitive JavaScript paginator.
 ## Settings Parameters
 Setting | Type | Usage
 ------------ | ------------- | -------------
-**prevText** | String | Text of the "previous" button.
-**nextText** | String | Text of the "next" button.
-**itemsPerPage** | Integer | Represents the limit for the number of items in a page.
-**data** | Array | The data which will be manipulated for pagination (Default: An array of HTMLElements).
-**pagingElement** | HTMLElement | The element where the relevant items per page will appear.
-**paginationBarElement** | HTMLElement | The element where the pagination bar will appear.
-paginationFunction *optional*| Function | Takes 2 parameters: *page data* and *paging element*. This function will be executed on page change. The default pagination function outputs HTMLElements to the paging element. If you would like to achieve different functionality, by all means.
-firstPageIsOne *optional* | Boolean | Makes it so that the visual representation of page numbers would start from 1 rather than 0.
+prevText *(optional)* | String | Text of the "previous" button. (Default: "*Prev*")
+nextText *(optional)* | String | Text of the "next" button. (Default: "*Next*")
+itemsPerPage *(optional)* | Integer | Represents the limit for the number of items in a page. (Default: "*1*")
+data **(required**) | Array | The data which will be manipulated for pagination (Default: An array of HTMLElements).
+pagingElement *(optional)* | HTMLElement | The element where the relevant items per page will appear. (**No paging element means you'd need a paging function**)
+paginationBarElement *(optional)* | HTMLElement | The element where the pagination bar will appear.
+paginationFunction *(optional)*| Function | Takes 2 parameters: *page data* and *paging element*. This function will be executed on page change. The default pagination function outputs HTMLElements to the paging element. If you would like to achieve different functionality, by all means.
+firstPageIsOne *(optional)* | Boolean | Makes it so that the visual representation of page numbers would start from 1 rather than 0. (Default: *turned off*)
 
 
 ## Available properties
