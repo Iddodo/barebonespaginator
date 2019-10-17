@@ -59,7 +59,7 @@ function BareBonesPaginator(inputSettings) {
         makePaginationButton(settings.prevText, "p"),
         ...Array.from({
             length: numberOfPages
-        }, (x, i) => makePaginationButton(settings.firstPageIsOne ? i + 1 : i, i)),
+        }, (x, i) => makePaginationButton((settings.firstPageIsOne ? (i + 1) : i).toString(), i.toString())),
         makePaginationButton(settings.nextText, "n")
     ].join('\n');
 
@@ -70,7 +70,7 @@ function BareBonesPaginator(inputSettings) {
     
     const bbPaginationButtonClick = (event) => { // Event on pagination button click
         const x = event.target.value;
-        if (parseInt(x) === pageIndex) {
+        if (parseInt(x) == pageIndex) {
             return;
         }
         if (x == 'p') {
@@ -88,7 +88,7 @@ function BareBonesPaginator(inputSettings) {
     getAllPaginationButtonElements().forEach(button => button.addEventListener("click", bbPaginationButtonClick)); 
     return {
         currentPage: pageIndex,
-        changePage,
+        page: changePage,
         setPaginationFunction: (f) => {
             if (typeof f === 'function') {
                 settings.paginationFunction = f;
@@ -96,13 +96,13 @@ function BareBonesPaginator(inputSettings) {
             }
             return false;
          },
-        paginationBarHTML,
-        getCurrentPageData,
-        gotoPrevPage,
-        gotoNextPage,
-        paginatedData,
-        numberOfItems,
-        numberOfItemsPerPage,
-        numberOfPages,
+        paginationBarHTML: paginationBarHTML,
+        getCurrentPageData: getCurrentPageData,
+        gotoPrevPage: gotoPrevPage,
+        gotoNextPage: gotoNextPage,
+        paginatedData: paginatedData,
+        itemNumber: numberOfItems,
+        itemsPerPage: numberOfItemsPerPage,
+        pagesNumber:numberOfPages,
     };
 }
