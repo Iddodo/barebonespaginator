@@ -2,9 +2,9 @@
 A Bare-Bones, very primitive JavaScript pagination tool.
 
 ##(TODO)
-- [] POTENTIAL ITEM COUNT
-- [] POTENTIAL PAGE NUMBER
-- [] OPTION TO LOAD MORE DATA ON PAGE CHANGE
+- [ ] POTENTIAL ITEM COUNT
+- [ ] POTENTIAL PAGE NUMBER
+- [ ] OPTION TO LOAD MORE DATA ON PAGE CHANGE
 
 ## Default Functionality
 * Takes an array (default: of HTMLElements) and the number of items per designated page.
