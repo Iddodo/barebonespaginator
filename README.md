@@ -60,11 +60,6 @@ const bb1 = BareBonesPaginator({
   paginationBarHTML: document.getElementById('bar-goes-here')
 });
 
-bb.setPaginationFunction((data) => console.log(data));
-bb.page(2); // Set page to 2.
-document.getElementById('bar').innerHTML = bb.paginationBarHTML;
-
-
 // ==== CUSTOM EXAMPLE ===
 const bb2 = BareBonesPaginator({
   itemsPerPage: 2;
@@ -72,8 +67,8 @@ const bb2 = BareBonesPaginator({
   firstPageIsOne: true;
 });
 
-bb.setPaginationFunction((data) => console.log(data));
-bb.page(2); // Set page to 2.
-document.getElementById('bar').innerHTML = bb.paginationBarHTML;
+bb2.setPaginationFunction((data) => console.log(data));
+bb2.page(2); // Set page to 2.
+document.getElementById('bar').innerHTML = bb2.paginationBarHTML;
 
 ```
