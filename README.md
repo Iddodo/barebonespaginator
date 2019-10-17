@@ -44,9 +44,30 @@ setPaginationFunction(Function f) | -- | Set the pagination function.
 
 
 ```javascript
-const bb = BareBonesPaginator({
+// === STANDARD EXAMPLE ===
+const bb1 = BareBonesPaginator({
   itemsPerPage: 3;
-  data: [HTMLElement, HTMLElement, HTMLElement, HTMLElement, HTMLElement, HTMLElement],
+  data: [
+    "<div>can</div>",
+    "<div>you</div>",
+    "<div>feel</div>",
+    "<div>it</div>",
+    "<div>Mr.</div>",
+    "<div>Krabs?</div>"
+  ],
+  pagingElement: document.getElementById('page-goes-here'),
+  paginationBarHTML: document.getElementById('bar-goes-here')
+});
+
+bb.setPaginationFunction((data) => console.log(data));
+bb.page(2); // Set page to 2.
+document.getElementById('bar').innerHTML = bb.paginationBarHTML;
+
+
+// ==== CUSTOM EXAMPLE ===
+const bb2 = BareBonesPaginator({
+  itemsPerPage: 2;
+  data: ['a', 'y', 'y', 'y', 'l', 'm', 'a', 'o']
   firstPageIsOne: true;
 });
 
