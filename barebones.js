@@ -9,9 +9,9 @@ function BareBonesPaginator(inputSettings) {
     if (!(settings.data instanceof Array)) {
     	throw "Wrong type received for 'data' parameter: Expected Array, got " + settings.data.constructor.name + " instead.";
     }
-    settings.numberOfItemsPerPage = settings.numberOfItemsPerPage || 1;
-    settings.prevText = settings.prevText || "Prev";
-    settings.prevText = settings.nextText || "Next";
+    if (!settings.itemsPerPage) settings.itemsPerPage =  1;
+    if (!settings.prevText) settings.prevText = "Prev";
+    if (!settings.nextText) settings.nextText = "Next";
 
     const makePaginationButton = (txt, val) => `<button class="bb-pagination-button" value="` + (val ? val : txt) + `">` + txt + `</button>`;
     const getAllPaginationButtonElements = () => [...settings.paginationBarElement.getElementsByClassName('bb-pagination-button')];
@@ -25,12 +25,12 @@ function BareBonesPaginator(inputSettings) {
     
 
     const numberOfItems = settings.data.length;
-    const numberOfItemsPerPage = settings.numberOfItemsPerPage;
-    const numberOfPages = Math.ceil(numberOfItems / numberOfItemsPerPage);
+    const itemsPerPage = settings.itemsPerPage;
+    const numberOfPages = Math.ceil(numberOfItems / itemsPerPage);
 
     const paginatingByReduce = (arr, currentItem, currentIndex) => {
-        const indexOfCurrentPage = parseInt(currentIndex / numberOfItemsPerPage);
-        const indexOfItemOnPage = currentIndex % numberOfItemsPerPage;
+        const indexOfCurrentPage = parseInt(currentIndex / itemsPerPage);
+        const indexOfItemOnPage = currentIndex % itemsPerPage;
         arr[indexOfCurrentPage] = arr[indexOfCurrentPage] || [];
 
         arr[indexOfCurrentPage][indexOfItemOnPage] = currentItem;
@@ -102,7 +102,7 @@ function BareBonesPaginator(inputSettings) {
         gotoNextPage: gotoNextPage,
         paginatedData: paginatedData,
         itemNumber: numberOfItems,
-        itemsPerPage: numberOfItemsPerPage,
+        itemsPerPage: itemsPerPage,
         pagesNumber:numberOfPages,
     };
 }
