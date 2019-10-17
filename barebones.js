@@ -1,61 +1,108 @@
 function BareBonesPaginator(inputSettings) {
-  const settings = {
-	  ...inputSettings
-  };
-  
-  const makePaginationButton =  (txt, val) =>  `<button class="bb-pagination-button" value="` + (val ? val : txt) + `">` + txt + `</button>`;
-  const getAllPaginationButtonElements = () => [...settings.paginationBarElement.getElementsByClassName('bb-pagination-button')];
-  
-  const originalData = settings.data;
-
-  const numberOfItems = originalData.length;
-  const numberOfItemsPerPage = settings.numberOfItemsPerPage;
-
-  const numberOfPages = Math.ceil(numberOfItems / numberOfItemsPerPage);
-
-  const paginatingByReduce = (arr, currentItem, currentIndex) => {
-    const indexOfCurrentPage =  parseInt(currentIndex / numberOfItemsPerPage);
-    const indexOfItemOnPage = currentIndex % numberOfItemsPerPage;
-    arr[indexOfCurrentPage] = arr[indexOfCurrentPage] || [];
-
-    arr[indexOfCurrentPage][indexOfItemOnPage] = currentItem;
-    return arr;
-  }
-  const paginatedData = originalData.reduce(paginatingByReduce, []);
-
-
-  const pageElement = settings.pagingElement;
-  let globalPageIndex = 0;
-  pageElement.innerHTML = [...paginatedData[globalPageIndex]].map(elm => elm.outerHTML).join('');
-	
-  const bbPaginationButtonClick = (event) => {
-  		const x = event.target.value;
-      if (parseInt(x) === globalPageIndex) {
-        return;
-      }
-      if (x == 'p' && globalPageIndex > 0) {
-        globalPageIndex = globalPageIndex - 1;
-      } else
-      if (x == 'n' && globalPageIndex < numberOfPages - 1) {
-        globalPageIndex = globalPageIndex + 1;
-      } else
-      if (!isNaN(x)) {
-        globalPageIndex = parseInt(x);
-      }
-    if (!settings.paginationFunction) {
-	pageElement.innerHTML = [...paginatedData[globalPageIndex]].map(elm => elm.outerHTML).join('');
-    } else {
-    	settings.paginationFunction(paginatedData[globalPageIndex], pageElement);
+    let pageIndex = 0;
+    const settings = {
+        ...inputSettings
+    };
+    if (!settings.data) {
+    	throw "Required parameter 'data' is missing.";
     }
-  }
-  const paginationBarInnerHTML = [
-    makePaginationButton(settings.prevText, "p"),
-    ...Array.from({length: numberOfPages}, (x,i) => makePaginationButton(i)),
-    makePaginationButton(settings.nextText, "n")
-  ].join('\n');
-  
-  settings.paginationBarElement.innerHTML = paginationBarInnerHTML;
- 	getAllPaginationButtonElements().forEach(button => button.addEventListener("click", bbPaginationButtonClick));
-  
+    if (!(settings.data instanceof Array)) {
+    	throw "Wrong type received for 'data' parameter: Expected Array, got " + settings.data.constructor.name + " instead.";
+    }
+    settings.numberOfItemsPerPage = settings.numberOfItemsPerPage || 1;
+    settings.prevText = settings.prevText || "Prev";
+    settings.prevText = settings.nextText || "Next";
 
+    const makePaginationButton = (txt, val) => `<button class="bb-pagination-button" value="` + (val ? val : txt) + `">` + txt + `</button>`;
+    const getAllPaginationButtonElements = () => [...settings.paginationBarElement.getElementsByClassName('bb-pagination-button')];
+    const onPageChange = (d) => { // Recieves array of current page item
+        if (!settings.paginationFunction && settings.pagingElement) {
+            settings.pagingElement.innerHTML = d.map(elm => elm.outerHTML).join('');
+        } else {
+            settings.paginationFunction(d, (settings.pagingElement || null)); // [...paginatedData[pageIndex]]
+        }
+    }
+    
+
+    const numberOfItems = settings.data.length;
+    const numberOfItemsPerPage = settings.numberOfItemsPerPage;
+    const numberOfPages = Math.ceil(numberOfItems / numberOfItemsPerPage);
+
+    const paginatingByReduce = (arr, currentItem, currentIndex) => {
+        const indexOfCurrentPage = parseInt(currentIndex / numberOfItemsPerPage);
+        const indexOfItemOnPage = currentIndex % numberOfItemsPerPage;
+        arr[indexOfCurrentPage] = arr[indexOfCurrentPage] || [];
+
+        arr[indexOfCurrentPage][indexOfItemOnPage] = currentItem;
+        return arr;
+    }
+    const paginatedData = settings.data.reduce(paginatingByReduce, []);
+
+    const getCurrentPageData = () => [...paginatedData[pageIndex]]; // [...] <-- in case it's not actually an array. It might be an HTMLCollection.
+    const changePage = (x) => {
+        if (!isNaN(x)) {
+            pageIndex = parseInt(x);
+        }
+        onPageChange(getCurrentPageData());
+    }
+    const gotoPrevPage = () => {
+	    if (pageIndex > 0) changePage(pageIndex - 1);
+    }
+    const gotoNextPage = () => {
+	    if (pageIndex < numberOfPages - 1) changePage(pageIndex + 1);
+    }
+
+    changePage(0); // Initialize paging
+
+    
+    const paginationBarHTML = [ // Prepare pagination bar
+        makePaginationButton(settings.prevText, "p"),
+        ...Array.from({
+            length: numberOfPages
+        }, (x, i) => makePaginationButton(settings.firstPageIsOne ? i + 1 : i, i)),
+        makePaginationButton(settings.nextText, "n")
+    ].join('\n');
+
+    if (settings.paginationBarElement) {
+        settings.paginationBarElement.innerHTML = paginationBarHTML; // Output to pagination bar element if it exists
+    }
+
+    
+    const bbPaginationButtonClick = (event) => { // Event on pagination button click
+        const x = event.target.value;
+        if (parseInt(x) === pageIndex) {
+            return;
+        }
+        if (x == 'p') {
+            gotoPrevPage();
+        } else
+        if (x == 'n') {
+            gotoNextPage();
+        } else
+        if (isNaN(x)) {
+            return;
+        } else {
+            changePage(x);
+        }
+    }
+    getAllPaginationButtonElements().forEach(button => button.addEventListener("click", bbPaginationButtonClick)); 
+    return {
+        currentPage: pageIndex,
+        changePage,
+        setPaginationFunction: (f) => {
+            if (typeof f === 'function') {
+                settings.paginationFunction = f;
+                return true;
+            }
+            return false;
+         },
+        paginationBarHTML,
+        getCurrentPageData,
+        gotoPrevPage,
+        gotoNextPage,
+        paginatedData,
+        numberOfItems,
+        numberOfItemsPerPage,
+        numberOfPages,
+    };
 }
