@@ -1,5 +1,24 @@
 function BareBonesPaginator(inputSettings) {
+	
+	const divElement = (text) => {
+	  var div = document.createElement('div');
+	  div.innerHTML = text.trim();
+
+	  return div.firstChild;
+	};
+
+	const defaults = {
+		prevText: "Prev",
+		nextText: "Next",
+		prevButtonValue: "bb-action-prev",
+		nextButtonValue: "bb-action-next"
+
+	};
+
     let pageIndex = 0;
+
+	console.log(inputSettings);
+
     const settings = {
         ...inputSettings
     };
@@ -9,41 +28,61 @@ function BareBonesPaginator(inputSettings) {
     if (!(settings.data instanceof Array)) {
     	throw "Wrong type received for 'data' parameter: Expected Array, got " + settings.data.constructor.name + " instead.";
     }
-    if (!settings.itemsPerPage) settings.itemsPerPage =  1;
-    if (!settings.prevText) settings.prevText = "Prev";
-    if (!settings.nextText) settings.nextText = "Next";
 
-    const makePaginationButton = (txt, val) => `<button class="bb-pagination-button" value="` + (val ? val : txt) + `">` + txt + `</button>`;
-    const onPageChange = (d) => { // Recieves array of current page item
-        if (!settings.paginationFunction && settings.pagingElement) {
-            settings.pagingElement.innerHTML = d.map(elm => elm.outerHTML).join('');
-        } else {
-            settings.paginationFunction(d, (settings.pagingElement || null)); // [...paginatedData[pageIndex]]
-        }
-    }
-    
+	if (!settings.pagingElement === undefined) {
+		throw "No paging element has been passed as argument to BareBonesPaginator object.";
+	}
+	
+	if (!settings.pagingElement || !(settings.pagingElement instanceof HTMLElement)) {
+		throw "A paging element was passed to BareBonesPaginator, but it's either undefined or not an HTMLElement.";
+	}
+
+
+    if (!settings.itemsPerPage) settings.itemsPerPage =  1;
+    if (!settings.prevText) settings.prevText = defaults.prevText;
+    if (!settings.nextText) settings.nextText = defaults.nextText;
+
+	// Set default pagination function in case such function does not exist
+	// pagingElement needs to be an HTMLElement, whereas $d is an array of HTMLElements.
+	if (!settings.paginationFunction) {
+		settings.paginationFunction = function(d, pagingElement) {
+            pagingElement.innerHTML = d.map(elm => elm.outerHTML).join('');
+		}
+	}
+
+    const makePaginationButton = (txt, val) => `<button class="bb-pagination-button" value="` + (val ? val : txt) + `">` + txt + `</button>`; 
 
     const numberOfItems = settings.data.length;
     const itemsPerPage = settings.itemsPerPage;
     const numberOfPages = Math.ceil(numberOfItems / itemsPerPage);
 
+	// Change this to return non-HTML types
     const paginatingByReduce = (arr, currentItem, currentIndex) => {
         const indexOfCurrentPage = parseInt(currentIndex / itemsPerPage);
         const indexOfItemOnPage = currentIndex % itemsPerPage;
         arr[indexOfCurrentPage] = arr[indexOfCurrentPage] || [];
 
+		// Handle case where plain text is passed
+		if (!(currentItem instanceof HTMLElement)) {
+			currentItem = divElement(currentItem);
+		}
         arr[indexOfCurrentPage][indexOfItemOnPage] = currentItem;
         return arr;
     }
     const paginatedData = settings.data.reduce(paginatingByReduce, []);
-
     const getCurrentPageData = () => [...paginatedData[pageIndex]]; // [...] <-- in case it's not actually an array. It might be an HTMLCollection.
-    const changePage = (x) => {
-        if (!isNaN(x)) {
-            pageIndex = parseInt(x);
+
+
+    const changePage = (pageNumber) => {
+        if (isNaN(pageNumber) || !Number.isInteger(pageNumber)) {
+			console.log(Number.isInteger(pageNumber));
+			throw "Non-integer value '" + pageNumber + "' of type '" + typeof pageNumber + "' in 'changePage()' function of BareBonesPaginator.";
         }
-        onPageChange(getCurrentPageData());
+
+		pageIndex = pageNumber;
+		settings.paginationFunction(getCurrentPageData(), settings.pagingElement); // [...paginatedData[pageIndex]]
     }
+
     const gotoPrevPage = () => {
 	    if (pageIndex > 0) changePage(pageIndex - 1);
     }
@@ -51,44 +90,53 @@ function BareBonesPaginator(inputSettings) {
 	    if (pageIndex < numberOfPages - 1) changePage(pageIndex + 1);
     }
 
-    changePage(0); // Initialize paging
 
         
     const bbPaginationButtonClick = (event) => { // Event on pagination button click
         const x = event.target.value;
-        if (parseInt(x) == pageIndex) {
+		const num = parseInt(x);
+
+		// No page change needed
+		if (num == pageIndex) {	
             return;
         }
-        if (x == 'p') {
+        if (x == defaults.prevButtonValue) {
             gotoPrevPage();
-        } else
-        if (x == 'n') {
-            gotoNextPage();
-        } else
-        if (isNaN(x)) {
-            return;
-        } else {
-            changePage(x);
+			return;
         }
+        if (x == defaults.nextButtonValue) {
+            gotoNextPage();
+			return;
+        }
+
+		// Not a previous/next command, throw error if casting to Integer has failed
+        if (isNaN(num)) {
+            throw "Non-integer value '" + x + "' in 'bbPaginationButtonClick()' function of BareBonesPaginator.";
+		}
+
+		changePage(num);
     }
     
-    const getAllPaginationButtonElements = () => [...settings.paginationBarElement.getElementsByClassName('bb-pagination-button')];
+    const getAllPaginationButtonElements = () => [...settings.paginationBar.getElementsByClassName('bb-pagination-button')];
     const activatePaginationButtonsEventListener = () => {
     	getAllPaginationButtonElements().forEach(button => button.addEventListener("click", bbPaginationButtonClick)); 
     }
     
     const paginationBarHTML = [ // Prepare pagination bar
-        makePaginationButton(settings.prevText, "p"),
+        makePaginationButton(settings.prevText, defaults.prevButtonValue),
         ...Array.from({
             length: numberOfPages
         }, (x, i) => makePaginationButton((settings.firstPageIsOne ? (i + 1) : i).toString(), i.toString())),
-        makePaginationButton(settings.nextText, "n")
+        makePaginationButton(settings.nextText, defaults.nextButtonValue)
     ].join('\n');
 
-    if (settings.paginationBarElement) {
-        settings.paginationBarElement.innerHTML = paginationBarHTML; // Output to pagination bar element if it exists
+    if (settings.paginationBar) {
+        settings.paginationBar.innerHTML = paginationBarHTML; // Output to pagination bar element if it exists
         activatePaginationButtonsEventListener();
     }
+
+    changePage(0); // Initialize paging
+
     return {
         currentPage: pageIndex,
         page: changePage,
@@ -107,6 +155,7 @@ function BareBonesPaginator(inputSettings) {
         itemNumber: numberOfItems,
         itemsPerPage: itemsPerPage,
         pagesNumber:numberOfPages,
-        activatePaginationButtons: activatePaginationButtonsEventListener
+        activatePaginationButtons: activatePaginationButtonsEventListener,
+		pagingElement: settings.pagingElement
     };
 }
