@@ -149,7 +149,7 @@ function BareBonesPaginator(inputSettings) {
 			}
 			return false;
 		},
-		paginationBarHTML: paginationBarHTML,
+		paginationBarHTML: settings.paginationBar,
 		getCurrentPageData: getCurrentPageData,
 		gotoPrevPage: gotoPrevPage,
 		gotoNextPage: gotoNextPage,
