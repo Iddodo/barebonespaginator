@@ -1,12 +1,4 @@
 function BareBonesPaginator(inputSettings) {
-	
-	const divElement = (text) => {
-	  var div = document.createElement('div');
-	  div.innerHTML = text.trim();
-
-	  return div.firstChild;
-	};
-
 	const defaults = {
 		prevText: "Prev",
 		nextText: "Next",
@@ -56,6 +48,14 @@ function BareBonesPaginator(inputSettings) {
     const itemsPerPage = settings.itemsPerPage;
     const numberOfPages = Math.ceil(numberOfItems / itemsPerPage);
 
+	// This function will pad text with div element in case of non-HTMLElement argument being passed
+	const divElement = (text) => {
+	  var div = document.createElement('div');
+	  div.innerHTML = text.trim();
+
+	  return div.firstChild;
+	};
+
 	// Change this to return non-HTML types
     const paginatingByReduce = (arr, currentItem, currentIndex) => {
         const indexOfCurrentPage = parseInt(currentIndex / itemsPerPage);
@@ -64,11 +64,17 @@ function BareBonesPaginator(inputSettings) {
 
 		// Handle case where plain text is passed
 		if (!(currentItem instanceof HTMLElement)) {
-			currentItem = divElement(currentItem);
+
+			if (typeof currentItem == 'string') {
+				currentItem = divElement(currentItem);
+			} else {
+				throw "A non-HTMLElement / string  value has been passed to BareBonesPaginator.";
+			}
 		}
         arr[indexOfCurrentPage][indexOfItemOnPage] = currentItem;
         return arr;
-    }
+    };
+
     const paginatedData = settings.data.reduce(paginatingByReduce, []);
     const getCurrentPageData = () => [...paginatedData[pageIndex]]; // [...] <-- in case it's not actually an array. It might be an HTMLCollection.
 
