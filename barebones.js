@@ -9,8 +9,6 @@ function BareBonesPaginator(inputSettings) {
 
 	let pageIndex = 0;
 
-	console.log(inputSettings);
-
 	const settings = {
 		...inputSettings
 	};
@@ -80,7 +78,6 @@ function BareBonesPaginator(inputSettings) {
 	
 	const changePage = (pageNumber) => {
 		if (isNaN(pageNumber) || !Number.isInteger(pageNumber)) {
-			console.log(Number.isInteger(pageNumber));
 			throw "Non-integer value '" + pageNumber + "' of type '" + typeof pageNumber + "' in 'changePage()' function of BareBonesPaginator.";
 		}
 
