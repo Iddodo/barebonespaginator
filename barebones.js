@@ -1,5 +1,6 @@
 function BareBonesPaginator(inputSettings) {
 	const defaults = {
+		itemsPerPage: 1,
 		prevText: "Prev",
 		nextText: "Next",
 		prevButtonValue: "bb-action-prev",
@@ -28,7 +29,7 @@ function BareBonesPaginator(inputSettings) {
 	}
 
 
-	if (!settings.itemsPerPage) settings.itemsPerPage =  1;
+	if (!settings.itemsPerPage) settings.itemsPerPage =  defaults.itemsPerPage;
 	if (!settings.prevText) settings.prevText = defaults.prevText;
 	if (!settings.nextText) settings.nextText = defaults.nextText;
 
