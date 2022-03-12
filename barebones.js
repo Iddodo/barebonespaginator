@@ -75,9 +75,9 @@ function BareBonesPaginator(inputSettings) {
 	};
 
 	const paginatedData = settings.data.reduce(paginatingByReduce, []);
-	const getCurrentPageData = () => [...paginatedData[pageIndex]]; // [...] <-- in case it's not actually an array. It might be an HTMLCollection.
-
-
+	
+	const getCurrentPageData = () => paginatedData[pageIndex]; 
+	
 	const changePage = (pageNumber) => {
 		if (isNaN(pageNumber) || !Number.isInteger(pageNumber)) {
 			console.log(Number.isInteger(pageNumber));
