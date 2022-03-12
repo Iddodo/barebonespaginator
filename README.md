@@ -30,7 +30,7 @@ currentPage | Integer | Get the active page index.
 itemNumber | Integer | Get the total number of items.
 pagesNumber | Integer | Get the total number of pages.
 itemsPerPage | Integer | Get the number of items per page.
-paginationBar | String | Get the pagination bar HTML.
+paginationBar | HTMLElement | Get the pagination bar element.
 pagingElement | HTMLElement | Get the paging element.
 
 ## Available functions
