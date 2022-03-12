@@ -1,7 +1,7 @@
 # barebones paginator
 A Bare-Bones, very primitive JavaScript pagination tool.
 
-## (TODO)
+##(TODO)
 - [ ] POTENTIAL ITEM COUNT
 - [ ] POTENTIAL PAGE NUMBER
 - [ ] OPTION TO LOAD MORE DATA ON PAGE CHANGE
